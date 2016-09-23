@@ -1,0 +1,85 @@
+1) What is the total amount of petrol in volume sold by every distributer?
+
+petrol_data = LOAD 'petrol_dataset.txt' USING PigStorage(',') AS (DistId:chararray, DistName:chararray, BuyRate:chararray, SellRate:chararray, VolIn:int, VolOut:int, Year:int);
+
+group_by_dist = GROUP petrol_data BY DistName;
+
+total_volume_sold_per_Distributor = foreach group_by_dist generate group, SUM(petrol_data.VolOut);
+
+dump total_volume_sold_per_Distributor;
+
+(shell,69266)
+(Bharat,83662)
+(reliance,76558)
+(hindustan,71767)
+
+2) Which are the top 10 distributers ID's for selling petrol? Also display the amount of petrol sold in volume.
+
+petrol_data = LOAD 'petrol_dataset.txt' USING PigStorage(',') AS (DistId:chararray, DistName:chararray, BuyRate:chararray, SellRate:chararray, VolIn:int, VolOut:int, Year:int);
+
+group_by_distid = GROUP petrol_data BY DistId;
+
+sum_sold_by_distid = FOREACH group_by_distid GENERATE group, SUM(petrol_data.VolOut) as sold;
+
+sort_volout = ORDER sum_sold_by_distid BY sold DESC;
+
+top_10_sold = LIMIT sort_volout 10;
+
+dump top_10_sold;
+
+(S8W 0P4,899)
+(T1A 9W4,899)
+(V8U 2T6,898)
+(O8A 6Z5,897)
+(O9P 9S3,897)
+(F6W 6H3,896)
+(E6O 9P1,895)
+(J4M 4G3,895)
+(N5Q 8E5,895)
+(M6S 1P4,895)
+
+3) List 10 years where consumption of petrol is more with the distributer id who sold it.
+
+petrol_data = LOAD 'petrol_dataset.txt' USING PigStorage(',') AS (DistId:chararray, DistName:chararray, BuyRate:chararray, SellRate:chararray, VolIn:int, VolOut:int, Year:int);
+
+group_by_distid = GROUP petrol_data BY DistId;
+
+total_volume_sold_per_Distributor = foreach group_by_distid generate group, petrol_data.DistName, petrol_data.Year, SUM(petrol_data.VolOut) as sold;
+
+sort_volout = ORDER total_volume_sold_per_Distributor BY sold DESC;
+
+data = FOREACH sort_volout GENERATE group,FLATTEN($1), FLATTEN($2), sold;
+
+top_10 = LIMIT data 10;
+
+dump top_10;
+
+(S8W 0P4,reliance,1925,899)
+(T1A 9W4,reliance,1943,899)
+(V8U 2T6,shell,2006,898)
+(O8A 6Z5,Bharat,1895,897)
+(O9P 9S3,reliance,1759,897)
+(F6W 6H3,shell,2004,896)
+(E6O 9P1,Bharat,1635,895)
+(J4M 4G3,shell,1721,895)
+(N5Q 8E5,Bharat,1842,895)
+(M6S 1P4,Bharat,1773,895)
+
+
+4) Find the distributer name who sold petrol in least amount.
+
+petrol_data = LOAD 'petrol_dataset.txt' USING PigStorage(',') AS (DistId:chararray, DistName:chararray, BuyRate:chararray, SellRate:chararray, VolIn:int, VolOut:int, Year:int);
+
+group_by_dist = GROUP petrol_data BY DistName;
+
+total_volume_sold_per_Distributor = foreach group_by_dist generate group, SUM(petrol_data.VolOut) as sold;
+
+sort_volout = ORDER total_volume_sold_per_Distributor BY sold ASC;
+
+least_sold = LIMIT sort_volout 1;
+
+dump least_sold;
+
+(shell,69266)
+
+

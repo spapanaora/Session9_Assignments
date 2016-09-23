@@ -1,0 +1,159 @@
+1) Find the number of students who scored less than 5(50%).
+
+student_data = LOAD 'student_dataset.txt' USING PigStorage(',') AS (Name:chararray, Undertaken:chararray, DOB:chararray, Stream:chararray, Grade:float, State:chararray, City:chararray);
+
+filter_students_score_less_5 = FILTER student_data BY Grade < 5;
+
+group_all = GROUP filter_students_score_less_5 ALL;
+
+number_of_students_score_less_5 = FOREACH group_all GENERATE COUNT($1);
+
+dump number_of_students_score_less_5;
+
+(188)
+
+2) List the name of students who are from Alaska.
+
+student_data = LOAD 'student_dataset.txt' USING PigStorage(',') AS (Name:chararray, Undertaken:chararray, DOB:chararray, Stream:chararray, Grade:float, State:chararray, City:chararray);
+
+filter_students_from_state_Alaska = FILTER student_data BY State == 'alaska';
+
+student_names_from_alaska = FOREACH filter_students_from_state_Alaska GENERATE Name;
+
+DUMP student_names_from_alaska;
+
+(BELL)
+(DAVIS)
+(LOGAN)
+(YOUNG)
+(COWEN)
+(DISHONG)
+(GIBSON)
+(IMMILE)
+(KEYSER)
+(POLK)
+(ROBTS&CMRN)
+(STEPHENS)
+(WEIRS)
+(JACOB)
+(BARBARA)
+(GEORGE)
+(SARAH)
+(WILLIAM)
+(JOHN)
+(JOHN)
+(STILLWEL)
+(Albright)
+(Bowman)
+(Brunner)
+(Carson)
+(Diller)
+(Denyes)
+(Ellmaker)
+(Fisher)
+(Gumpf)
+(Hartman)
+(Halbach)
+(Huber)
+(Houser)
+(Jordan)
+(Keubler)
+(Kendig)
+(Long)
+(McGinnis)
+(Miller)
+(Nourse)
+(Quinn)
+(Rotharmel)
+(Sherer)
+(Sherwood)
+(Voight)
+(Waters)
+(Wiley)
+(Zahm)
+(Matthew)
+(Peter)
+(Christian)
+(George)
+(Alexander)
+(Frederick)
+(Michael)
+(Richard)
+(Jacob)
+(Joseph)
+(John W)
+(Michael O)
+(Daniel)
+(William)
+(William)
+(Joseph)
+(Henry)
+(Samuel)
+(John)
+
+3) How many government collages are there in Alabama?
+
+student_data = LOAD 'student_dataset.txt' USING PigStorage(',') AS (Name:chararray, Undertaken:chararray, DOB:chararray, Stream:chararray, Grade:float, State:chararray, City:chararray);
+
+filter_data_state_alaska_gov = FILTER student_data BY State == 'alaska' and Undertaken == 'goverenment';
+
+group_all = GROUP filter_data_state_alaska_gov all;
+
+count_of_alaska_gov_colg = FOREACH group_all GENERATE COUNT($1);
+
+dump count_of_alaska_gov_colg;
+
+(67)
+
+4) List the name of students who are from Oregon and perusing BE
+
+student_data = LOAD 'student_dataset.txt' USING PigStorage(',') AS (Name:chararray, Undertaken:chararray, DOB:chararray, Stream1:chararray, Grade:float, State:chararray, City:chararray);
+
+filter_data_oregon_BE = FILTER student_data BY State == 'oregon' and Stream1 == 'BE';
+
+student_names_oregon_BE = FOREACH filter_data_oregon_BE GENERATE Name;
+
+DUMP student_names_oregon_BE;
+
+(BLOOM)
+(PATTERSON)
+(WAGGONER)
+(IMMILE)
+(SHOCK)
+(WHITE)
+(JOHN)
+(RICHARD)
+(JACOB)
+(Albright)
+(Buckius)
+(Bowman)
+(Cordes)
+(Danner)
+(Donas)
+(Ehrisman)
+(Frick)
+(Grimler)
+(Heinitsh)
+(Himmelsbach)
+(Hubley)
+(Kitch)
+(Lambert)
+(McNair)
+(Naumann)
+(Royal)
+(Shindle)
+(Wayne)
+(Reformed)
+(P.K.)
+(Charles H)
+(Jacob)
+(Daniel)
+(George)
+(John)
+(Peter)
+(George B)
+(Philip)
+(Dennis)
+(George)
+(Edwin)
+(Frederick)
